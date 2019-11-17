@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # initialize hyper-parameters
     dim_z = 9
     learning_rate = 0.01
-    decay_rate = 0.99
+    decay_rate = 0.01
     batch_size = 100
     epoch = 10
 
@@ -97,7 +97,7 @@ if __name__ == "__main__":
                 plot_generated_image(gi[0])
 
         sec = int(time.time() - start_time)
-        print("Epoch: {} | loss: {} | lr: {} | Time: {} sec\n".format(i, loss_val, lr, sec))
+        print("Epoch: {} | loss: {} | global step: {} | lr: {} | Time: {} sec\n".format(i, loss_val, g, lr, sec))
 
     print("learning finished")
     writer.close()
