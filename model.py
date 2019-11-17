@@ -7,10 +7,10 @@ class Model:
     def __init__(self, shape, dim_label, hidden_layer_list, dim_z):
         self.shape = shape
         self.dim_label = dim_label
-        self.hidden_layer_list = hidden_layer_list
+        self.hidden_layer_list = hidden_layer_list  # shape of hidden layer for encoder and decoder
         self.dim_z = dim_z
         # height * weight * channel
-        self.out_layer = self.shape[1] * self.shape[2] * self.shape[3]
+        self.out_layer = self.shape[0] * self.shape[1] * self.shape[2]  # 64 * 64 * 1
         self.initializer = tf.compat.v1.variance_scaling_initializer()
 
     def relu(self, input):
@@ -19,12 +19,11 @@ class Model:
     def dense(self, inputs, units, name):
         return tf.compat.v1.layers.dense(inputs=inputs,
                                          units=units,
-                                         reuse=tf.compat.v1.AUTO_REUSE,
                                          name=name,
                                          kernel_initializer=self.initializer)
 
     def encoder(self, X, C):
-        with tf.compat.v1.variable_scope("encoder", reuse=tf.compat.v1.AUTO_REUSE):
+        with tf.compat.v1.variable_scope("encoder"):
             X_input = tf.concat((X, C), axis=1)
             net = self.relu(self.dense(X_input, self.hidden_layer_list[0], name="Dense_1"))
             net = self.relu(self.dense(net, self.hidden_layer_list[1], name="Dense_2"))
@@ -35,7 +34,7 @@ class Model:
         return mean, std
 
     def decoder(self, Z, C):
-        with tf.compat.v1.variable_scope("decoder", reuse=tf.compat.v1.AUTO_REUSE):
+        with tf.compat.v1.variable_scope("decoder"):
             z_input = tf.concat((Z, C), axis=1)
             net = self.relu(self.dense(z_input, self.hidden_layer_list[2], name="Dense_1"))
             net = self.relu(self.dense(net, self.hidden_layer_list[3], name="Dense_2"))
@@ -55,7 +54,7 @@ class Model:
 
         # feed latent variable z and condition to decoder
         output = self.decoder(z, C)
-        clipped_output = tf.clip_by_value(output, 1e-8, 1 - 1e-8)
+        clipped_output = tf.clip_by_value(output, 1e-7, 1 - 1e-7)
         tf.identity(clipped_output, name="output")
 
         # loss function

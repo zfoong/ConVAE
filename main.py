@@ -13,6 +13,7 @@ def plot_generated_image(image):
     print("plot image")
     plt.figure(figsize=(8, 8))
     plt.imshow(canvas, cmap="gray")
+    plt.show()
 
 
 def next_batch(batch, images, labels, batch_size):
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     X = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, height, width, channel], name="Input")
     # condition - pass in label to train, and act as an input during prediction
     C = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, dim_label], name="labels")
-    model = Model([_, height, width, channel], dim_label, [1000, 500, 500, 1000], dim_z)
+    model = Model([height, width, channel], dim_label, [1000, 500, 500, 1000], dim_z)
     z, output, loss, likelihood, kl_d = model.CVAE(X, C)
 
     # latent = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, dim_z], name="latent_variable")
@@ -90,11 +91,10 @@ if __name__ == "__main__":
             loss_val += l / total_batch
 
             if i is (epoch - 1) and j is (total_batch - 1):
-                for m in enumerate(gi):
-                    id = np.argmax(train_y)
-                    lb = id_to_character(id_dict, id)
-                    print("plotting image for label '{}'".format(lb))
-                    plot_generated_image(gi[m])
+                id = np.argmax(train_y[0])
+                lb = id_to_character(id_dict, id)
+                print("plotting image for label '{}'".format(lb))
+                plot_generated_image(gi[0])
 
         sec = int(time.time() - start_time)
         print("Epoch: {} | loss: {} | lr: {} | Time: {} sec\n".format(i, loss_val, lr, sec))

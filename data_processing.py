@@ -41,8 +41,9 @@ def character_to_id(id_dict, char):
 
 
 def id_to_character(id_dict, id):
+    _id = id.item()
     for key, item in id_dict.items():
-        if item is id:
+        if item is _id:
             return key
 
 
