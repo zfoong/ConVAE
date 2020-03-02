@@ -1,12 +1,5 @@
-# Coursework-Foong
+# Conditional Variational Autoencoder implementation
 
-## Student Information
-
-Name : Tham Yik Foong
-
-Student ID : 20200786
-
-Course : Machine Learning in Science MSC
 
 ## Overview
 
@@ -43,6 +36,3 @@ Below are result generated from current model
 <img src="/images/generated_output_3.png" alt="4st epoch" width="250" height="250">
 <img src="/images/generated_output_4.png" alt="5st epoch" width="250" height="250">
 <img src="/images/generated_output_19.png" alt="19st epoch" width="250" height="250">
-
-## Note
-Thank you for the feedback for 'sub2' and sharing the article of how to implement VAE in Keras, both are very helpful!
